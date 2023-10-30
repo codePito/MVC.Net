@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Routing.Constraints;
+using MVC.Areas.ProductManage.Services;
+using MVC.ExtendMethods;
 using MVC.Services;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +21,9 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
 });
 
 builder.Services.AddSingleton<ProductService, ProductService>();
+builder.Services.AddSingleton<PlanetService>();
+
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
@@ -30,6 +37,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.AddStatusCodePage(); //Tuy bien respone loi : 404-599
 
 app.UseRouting();
 
@@ -38,9 +46,42 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
     {
+
+
+        endpoints.MapControllers();
+
         endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+                name: "first",
+                pattern: "{url:regex(^((xemsanpham)|(viewproduct))$)}/{id:range(2,4)}",
+                defaults: new
+                {
+                    controller = "First",
+                    action = "ViewProduct"
+                }
+    //            constraints: new
+    //            {
+    //                url = new RegexRouteConstraint(@"^((xemsanpham)|(viewproduct))$"),
+    //                id = new RangeRouteConstraint(2,4)
+    //}
+            );
+
+        endpoints.MapAreaControllerRoute(
+                name:"product",
+                pattern: "/{controller}/{action=Index}/{id?}",
+                areaName: "ProductManage"
+            );
+
+
+        endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "/{controller=Home}/{action=Index}/{id?}"
+                //defaults: new
+                //{
+                //    controller = "First",
+                //    action = "ViewProduct",
+                //}
+            );
+
         endpoints.MapRazorPages();
     });
 app.Run();
