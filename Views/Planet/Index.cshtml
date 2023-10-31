@@ -1,0 +1,20 @@
+﻿@page
+@model MVC.Views.Planet.IndexModel
+@{
+}
+@inject MVC.Services.PlanetService planetService
+
+<h1>Cac hanh tinh trong he Mat Troi</h1>
+
+<div class="list-group">
+    @foreach (var planet in planetService)
+    {
+        <a class="list-group-item list-group-item-action" asp-controller="Planet" asp-action="@planet.Name">
+            @planet.VnName - @planet.Name
+        </a>
+    }
+</div>
+
+<p>
+    @Url.RouteUrl("neptune1")
+</p>

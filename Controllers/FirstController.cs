@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVC.Areas.ProductManage.Services;
 using MVC.Services;
 
 namespace MVC.Controllers
@@ -80,6 +81,11 @@ namespace MVC.Controllers
 
             return View((object)userName);
         }
+
+        [TempData]
+        public string StatusMessage { get; set; }
+
+        [AcceptVerbs("POST")]
         public IActionResult ViewProduct(int? id)
         {
             var product = _productService.Where(x => x.Id == id).FirstOrDefault();

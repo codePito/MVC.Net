@@ -1,6 +1,6 @@
 ﻿using MVC.Models;
 
-namespace MVC.Services
+namespace MVC.Areas.ProductManage.Services
 {
     public class ProductService : List<ProductModel>
     {
