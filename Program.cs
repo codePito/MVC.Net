@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.EntityFrameworkCore;
 using MVC.Areas.ProductManage.Services;
 using MVC.ExtendMethods;
+using MVC.Models;
 using MVC.Services;
 using System.Net;
 
@@ -10,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AppMVCConnectionString"));
+});
 
 builder.Services.Configure<RazorViewEngineOptions>(options =>
 {
